@@ -8,6 +8,7 @@ const mockClient = {
       const queryBuilder = {
         eq: (column: string, value: any) => queryBuilder,
         in: (column: string, values: any[]) => queryBuilder,
+        gte: (column: string, value: any) => queryBuilder, // Added gte method for date filtering
         order: (column: string, options?: any) => queryBuilder,
         limit: (count: number) => queryBuilder,
         single: () => ({
@@ -94,6 +95,60 @@ const mockClient = {
                 price_range: "$30-80",
                 category: "Water Sports",
                 image_url: "/bora-bora-lagoon-aerial.png",
+              },
+            ]
+          } else if (table === "events") {
+            sampleData = [
+              {
+                id: 1,
+                name: "Maldives Music Festival",
+                description: "Annual music festival featuring international and local artists",
+                start_date: "2024-06-15",
+                end_date: "2024-06-17",
+                location: "Male, Maldives",
+                price: 150,
+                category: "Music",
+                featured: true,
+                image_url: "/maldives-sunset-beach-aerial.png",
+                islands: {
+                  name: "Maldives Paradise",
+                  slug: "maldives-paradise",
+                  location: "Indian Ocean",
+                },
+              },
+              {
+                id: 2,
+                name: "Bora Bora Cultural Festival",
+                description: "Celebrate Polynesian culture with traditional dance and food",
+                start_date: "2024-07-20",
+                end_date: "2024-07-22",
+                location: "Vaitape, Bora Bora",
+                price: 75,
+                category: "Cultural",
+                featured: true,
+                image_url: "/bora-bora-lagoon-aerial.png",
+                islands: {
+                  name: "Bora Bora Lagoon",
+                  slug: "bora-bora-lagoon",
+                  location: "French Polynesia",
+                },
+              },
+              {
+                id: 3,
+                name: "Santorini Wine Tasting",
+                description: "Exclusive wine tasting experience with sunset views",
+                start_date: "2024-08-10",
+                end_date: "2024-08-10",
+                location: "Oia, Santorini",
+                price: 120,
+                category: "Food & Drink",
+                featured: false,
+                image_url: "/santorini-peak-ocean.png",
+                islands: {
+                  name: "Santorini Cliffs",
+                  slug: "santorini-cliffs",
+                  location: "Greece",
+                },
               },
             ]
           }
