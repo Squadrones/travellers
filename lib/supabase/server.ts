@@ -1,175 +1,30 @@
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from "next/headers"
 import { cache } from "react"
 
-// Mock Supabase configuration check
-export const isSupabaseConfigured = true
+// Check if Supabase environment variables are available
+export const isSupabaseConfigured =
+  typeof process.env.NEXT_PUBLIC_SUPABASE_URL === "string" &&
+  process.env.NEXT_PUBLIC_SUPABASE_URL.length > 0 &&
+  typeof process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY === "string" &&
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY.length > 0
 
-// Mock client that returns sample data to prevent errors
-const mockClient = {
-  auth: {
-    getUser: () => Promise.resolve({ data: { user: null }, error: null }),
-    getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-  },
-  from: (table: string) => ({
-    select: (columns?: string) => {
-      const queryBuilder = {
-        eq: (column: string, value: any) => queryBuilder,
-        in: (column: string, values: any[]) => queryBuilder,
-        gte: (column: string, value: any) => queryBuilder, // Added gte method for date filtering
-        order: (column: string, options?: any) => queryBuilder,
-        limit: (count: number) => queryBuilder,
-        single: () => ({
-          then: (callback: any) => {
-            // Return single record based on table and query
-            let sampleData = null
-            if (table === "islands") {
-              sampleData = {
-                id: 2,
-                name: "Bora Bora Lagoon",
-                slug: "bora-bora-lagoon",
-                description:
-                  "Stunning lagoon with volcanic peaks and crystal-clear waters. Experience luxury overwater bungalows and world-class snorkeling in this French Polynesian paradise.",
-                short_description: "Stunning lagoon with volcanic peaks",
-                featured: true,
-                image_url: "/bora-bora-lagoon-aerial.png",
-                created_at: new Date().toISOString(),
-                country: "French Polynesia",
-                region: "Pacific",
-                climate: "Tropical",
-                currency: "CFP Franc",
-                language: "French, Tahitian",
-                visa_required: false,
-                best_time_to_visit: "May to October",
-                time_zone: "GMT-10",
-                population: "10,605",
-                area: "30.55 km²",
-              }
-            }
-            return Promise.resolve({ data: sampleData, error: null }).then(callback)
-          },
-        }),
-        then: (callback: any) => {
-          // Return sample data based on table
-          let sampleData = []
-          if (table === "islands") {
-            sampleData = [
-              {
-                id: 1,
-                name: "Maldives Paradise",
-                slug: "maldives-paradise",
-                description: "Crystal clear waters and overwater bungalows",
-                featured: true,
-                image_url: "/maldives-sunset-beach-aerial.png",
-                created_at: new Date().toISOString(),
-              },
-              {
-                id: 2,
-                name: "Bora Bora Lagoon",
-                slug: "bora-bora-lagoon",
-                description: "Stunning lagoon with volcanic peaks",
-                featured: true,
-                image_url: "/bora-bora-lagoon-aerial.png",
-                created_at: new Date().toISOString(),
-              },
-              {
-                id: 3,
-                name: "Santorini Cliffs",
-                slug: "santorini-cliffs",
-                description: "Dramatic cliffs and sunset views",
-                featured: true,
-                image_url: "/santorini-peak-ocean.png",
-                created_at: new Date().toISOString(),
-              },
-            ]
-          } else if (table === "destinations") {
-            sampleData = [
-              {
-                id: 1,
-                name: "Mount Otemanu",
-                description: "Volcanic peak offering hiking and scenic views",
-                island_id: 2,
-                rating: 4.8,
-                price_range: "$50-100",
-                category: "Adventure",
-                image_url: "/bora-bora-lagoon-aerial.png",
-              },
-              {
-                id: 2,
-                name: "Coral Gardens",
-                description: "World-class snorkeling and diving spot",
-                island_id: 2,
-                rating: 4.9,
-                price_range: "$30-80",
-                category: "Water Sports",
-                image_url: "/bora-bora-lagoon-aerial.png",
-              },
-            ]
-          } else if (table === "events") {
-            sampleData = [
-              {
-                id: 1,
-                title: "Maldives Music Festival", // Changed from 'name' to 'title'
-                description: "Annual music festival featuring international and local artists",
-                start_date: "2024-06-15",
-                end_date: "2024-06-17",
-                location: "Male, Maldives",
-                price: 150,
-                event_type: "Music", // Changed from 'category' to 'event_type'
-                featured: true,
-                image_url: "/maldives-sunset-beach-aerial.png",
-                islands: {
-                  name: "Maldives Paradise",
-                  slug: "maldives-paradise",
-                  location: "Indian Ocean",
-                },
-              },
-              {
-                id: 2,
-                title: "Bora Bora Cultural Festival", // Changed from 'name' to 'title'
-                description: "Celebrate Polynesian culture with traditional dance and food",
-                start_date: "2024-07-20",
-                end_date: "2024-07-22",
-                location: "Vaitape, Bora Bora",
-                price: 75,
-                event_type: "Cultural", // Changed from 'category' to 'event_type'
-                featured: true,
-                image_url: "/bora-bora-lagoon-aerial.png",
-                islands: {
-                  name: "Bora Bora Lagoon",
-                  slug: "bora-bora-lagoon",
-                  location: "French Polynesia",
-                },
-              },
-              {
-                id: 3,
-                title: "Santorini Wine Tasting", // Changed from 'name' to 'title'
-                description: "Exclusive wine tasting experience with sunset views",
-                start_date: "2024-08-10",
-                end_date: "2024-08-10",
-                location: "Oia, Santorini",
-                price: 120,
-                event_type: "Food & Drink", // Changed from 'category' to 'event_type'
-                featured: false,
-                image_url: "/santorini-peak-ocean.png",
-                islands: {
-                  name: "Santorini Cliffs",
-                  slug: "santorini-cliffs",
-                  location: "Greece",
-                },
-              },
-            ]
-          }
-          return Promise.resolve({ data: sampleData, error: null }).then(callback)
-        },
-      }
-      return queryBuilder
-    },
-    insert: (data: any) => Promise.resolve({ data: null, error: null }),
-    update: (data: any) => Promise.resolve({ data: null, error: null }),
-    delete: () => Promise.resolve({ data: null, error: null }),
-  }),
-}
-
-// Create a cached version of the mock client for Server Components
+// Create a cached version of the Supabase client for Server Components
 export const createClient = cache(() => {
-  return mockClient
+  const cookieStore = cookies()
+
+  if (!isSupabaseConfigured) {
+    console.warn("Supabase environment variables are not set. Using dummy client.")
+    return {
+      auth: {
+        getUser: () => Promise.resolve({ data: { user: null }, error: null }),
+        getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+      },
+      from: () => ({
+        select: () => Promise.resolve({ data: [], error: null }),
+      }),
+    }
+  }
+
+  return createServerComponentClient({ cookies: () => cookieStore })
 })
