@@ -1,0 +1,444 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Island Paradise Design System
+All colors are HSL values inspired by tropical destinations
+*/
+
+:root {
+  /* Base colors - Ocean inspired */
+  --background: 200 30% 98%;
+  --foreground: 210 25% 15%;
+
+  /* Card system - Clean whites with subtle ocean tints */
+  --card: 200 50% 99%;
+  --card-foreground: 210 25% 15%;
+
+  /* Popover system */
+  --popover: 200 50% 99%;
+  --popover-foreground: 210 25% 15%;
+
+  /* Primary - Deep ocean blue */
+  --primary: 210 85% 25%;
+  --primary-foreground: 200 30% 98%;
+  --primary-glow: 210 85% 40%;
+
+  /* Secondary - Coral reef accent */
+  --secondary: 25 85% 60%;
+  --secondary-foreground: 210 25% 15%;
+
+  /* Muted - Sandy beach tones */
+  --muted: 40 20% 94%;
+  --muted-foreground: 210 15% 50%;
+
+  /* Accent - Tropical teal */
+  --accent: 180 60% 50%;
+  --accent-foreground: 200 30% 98%;
+
+  /* Destructive */
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 200 30% 98%;
+
+  /* Interactive elements */
+  --border: 200 20% 88%;
+  --input: 200 20% 88%;
+  --ring: 210 85% 25%;
+
+  /* Island-specific design tokens */
+  --ocean-deep: 210 85% 25%;
+  --ocean-light: 200 60% 85%;
+  --coral: 25 85% 60%;
+  --sand: 40 30% 85%;
+  --tropical-green: 150 40% 60%;
+
+  /* Gradients */
+  --gradient-ocean: linear-gradient(135deg, hsl(210 85% 25%), hsl(200 60% 45%));
+  --gradient-sunset: linear-gradient(135deg, hsl(25 85% 60%), hsl(40 90% 70%));
+  --gradient-tropical: linear-gradient(135deg, hsl(180 60% 50%), hsl(150 40% 60%));
+  --gradient-hero: linear-gradient(135deg, hsl(210 85% 25%) 0%, hsl(200 60% 45%) 50%, hsl(180 60% 50%) 100%);
+
+  /* Shadows and effects */
+  --shadow-ocean: 0 10px 30px -10px hsl(210 85% 25% / 0.3);
+  --shadow-float: 0 20px 40px -10px hsl(210 85% 25% / 0.2);
+  --glow-coral: 0 0 30px hsl(25 85% 60% / 0.4);
+
+  --radius: 0.5rem;
+  --chart-1: 25 85% 60%;
+  --chart-2: 180 60% 50%;
+  --chart-3: 150 40% 60%;
+  --chart-4: 210 85% 25%;
+  --chart-5: 40 30% 85%;
+
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 240 5.3% 26.1%;
+  --sidebar-primary: 240 5.9% 10%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 240 4.8% 95.9%;
+  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 217.2 91.2% 59.8%;
+}
+
+.dark {
+  /* Dark mode - Deep ocean night */
+  --background: 210 30% 8%;
+  --foreground: 200 30% 95%;
+
+  --card: 210 25% 12%;
+  --card-foreground: 200 30% 95%;
+
+  --popover: 210 25% 12%;
+  --popover-foreground: 200 30% 95%;
+
+  --primary: 180 60% 50%;
+  --primary-foreground: 210 30% 8%;
+  --primary-glow: 180 60% 60%;
+
+  --secondary: 25 70% 55%;
+  --secondary-foreground: 200 30% 95%;
+
+  --muted: 210 20% 18%;
+  --muted-foreground: 200 15% 65%;
+
+  --accent: 210 85% 45%;
+  --accent-foreground: 200 30% 95%;
+
+  --destructive: 0 75% 55%;
+  --destructive-foreground: 200 30% 95%;
+
+  --border: 210 20% 20%;
+  --input: 210 20% 20%;
+  --ring: 180 60% 50%;
+
+  /* Dark mode island tokens */
+  --ocean-deep: 210 85% 35%;
+  --ocean-light: 200 40% 25%;
+  --coral: 25 70% 55%;
+  --sand: 40 20% 25%;
+  --tropical-green: 150 30% 40%;
+
+  /* Dark mode gradients */
+  --gradient-ocean: linear-gradient(135deg, hsl(210 85% 35%), hsl(200 40% 25%));
+  --gradient-sunset: linear-gradient(135deg, hsl(25 70% 55%), hsl(40 70% 50%));
+  --gradient-tropical: linear-gradient(135deg, hsl(180 60% 50%), hsl(150 30% 40%));
+  --gradient-hero: linear-gradient(135deg, hsl(210 85% 35%) 0%, hsl(200 40% 25%) 50%, hsl(180 60% 50%) 100%);
+
+  --shadow-ocean: 0 10px 30px -10px hsl(0 0% 0% / 0.5);
+  --shadow-float: 0 20px 40px -10px hsl(0 0% 0% / 0.4);
+  --glow-coral: 0 0 30px hsl(25 70% 55% / 0.4);
+
+  --chart-1: 25 70% 55%;
+  --chart-2: 180 60% 50%;
+  --chart-3: 150 30% 40%;
+  --chart-4: 210 85% 35%;
+  --chart-5: 40 20% 25%;
+
+  --sidebar-background: 210 30% 8%;
+  --sidebar-foreground: 200 30% 95%;
+  --sidebar-primary: 180 60% 50%;
+  --sidebar-primary-foreground: 210 30% 8%;
+  --sidebar-accent: 210 20% 18%;
+  --sidebar-accent-foreground: 200 30% 95%;
+  --sidebar-border: 210 20% 20%;
+  --sidebar-ring: 180 60% 50%;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar-background);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@theme inline {
+  --font-sans: var(--font-dm-sans);
+  --font-serif: var(--font-playfair-display);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Typography */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Island-themed component variants */
+  .hero-text {
+    background: var(--gradient-hero);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 200%;
+    animation: gradient-shift 4s ease-in-out infinite;
+  }
+
+  .island-card {
+    @apply bg-card border border-border rounded-2xl p-6 transition-all duration-300;
+    box-shadow: var(--shadow-ocean);
+  }
+
+  .island-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-float);
+  }
+
+  .ocean-button {
+    background: var(--gradient-ocean);
+    @apply text-primary-foreground px-8 py-4 rounded-full font-medium transition-all duration-300;
+    box-shadow: var(--shadow-ocean);
+  }
+
+  .ocean-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-float);
+  }
+
+  .coral-accent {
+    color: hsl(var(--coral));
+  }
+
+  .wave-animation {
+    animation: wave 3s ease-in-out infinite;
+  }
+
+  /* Enhanced island card styles */
+  .island-card-enhanced {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0);
+  }
+
+  .island-card-enhanced:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: var(--shadow-float);
+  }
+
+  /* Glass effect */
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* Enhanced navigation */
+  .nav-enhanced {
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .nav-enhanced.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--shadow-ocean);
+  }
+}
+
+@layer utilities {
+  /* Custom animations */
+  @keyframes gradient-shift {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes wave {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    33% {
+      transform: translateY(-10px) rotate(1deg);
+    }
+    66% {
+      transform: translateY(-5px) rotate(-1deg);
+    }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Smooth fade-in animations */
+  .smooth-fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .smooth-fade-in.delay-1 {
+    transition-delay: 0.2s;
+  }
+
+  .smooth-fade-in.delay-2 {
+    transition-delay: 0.4s;
+  }
+
+  .smooth-fade-in.delay-3 {
+    transition-delay: 0.6s;
+  }
+
+  .smooth-fade-in.opacity-100 {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Button hover effects */
+  .button-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0);
+  }
+
+  .button-hover:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: var(--shadow-float);
+  }
+
+  /* Statistics counter animation */
+  .stat-counter {
+    animation: fadeInUp 0.8s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Loading animations */
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.05);
+    }
+  }
+
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  /* Parallax background */
+  .parallax-bg {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  @media (max-width: 768px) {
+    .parallax-bg {
+      background-attachment: scroll;
+    }
+  }
+}
+
+/* Virtual tour map overlay constraints */
+.virtual-tour-map-overlay {
+  position: absolute !important;
+  width: 320px !important;
+  height: 256px !important;
+  max-width: 320px !important;
+  max-height: 256px !important;
+  overflow: hidden !important;
+  z-index: 40 !important;
+}
+
+.virtual-tour-map-overlay .leaflet-container {
+  width: 320px !important;
+  height: 256px !important;
+  max-width: 320px !important;
+  max-height: 256px !important;
+}
+
+.virtual-tour-map-overlay .leaflet-popup-pane {
+  display: none !important;
+}
+
+.virtual-tour-map-overlay .leaflet-tooltip-pane {
+  display: none !important;
+}
+
+/* Disable map interactions in virtual tour overlay */
+.virtual-tour-map-overlay .leaflet-container {
+  cursor: default !important;
+}
+
+.virtual-tour-map-overlay .custom-marker:hover {
+  transform: none !important;
+  box-shadow: var(--shadow-ocean) !important;
+}

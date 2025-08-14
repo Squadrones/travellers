@@ -1,0 +1,28 @@
+-- Insert sample events for each island
+INSERT INTO events (island_id, title, description, event_type, start_date, end_date, start_time, end_time, location, coordinates, image_url, ticket_price, ticket_url, organizer, contact_info, featured) VALUES
+
+-- Santorini Events
+((SELECT id FROM islands WHERE slug = 'santorini'), 'Santorini Wine Festival', 'Celebrate the island''s renowned wine heritage with tastings from local vineyards, traditional music, and spectacular sunset views. Experience the unique volcanic terroir that makes Santorini wines world-famous.', 'festival', '2024-08-15', '2024-08-17', '18:00', '23:00', 'Fira Town Square', '{"lat": 36.4161, "lng": 25.4324}', '/placeholder.svg?height=400&width=600', 45.00, 'https://santorini-wine-festival.com', 'Santorini Wine Association', '{"email": "info@santorini-wine.gr", "phone": "+30 22860 22358"}', true),
+
+((SELECT id FROM islands WHERE slug = 'santorini'), 'Classical Music at the Caldera', 'An enchanting evening of classical music performed against the backdrop of the famous Santorini caldera. World-class musicians perform as the sun sets over the Aegean Sea.', 'concert', '2024-09-10', '2024-09-10', '19:30', '22:00', 'Oia Castle Ruins', '{"lat": 36.4618, "lng": 25.3753}', '/placeholder.svg?height=400&width=600', 75.00, 'https://santorini-concerts.com', 'Aegean Cultural Foundation', '{"email": "concerts@aegean-culture.gr", "phone": "+30 22860 71234"}', true),
+
+-- Bali Events
+((SELECT id FROM islands WHERE slug = 'bali'), 'Galungan Festival', 'The most important Hindu-Balinese celebration marking the victory of good over evil. Experience traditional ceremonies, decorated bamboo poles (penjor), and authentic Balinese culture.', 'cultural', '2024-07-24', '2024-08-03', '06:00', '21:00', 'Temples across Bali', '{"lat": -8.3405, "lng": 115.0920}', '/placeholder.svg?height=400&width=600', 0.00, null, 'Bali Hindu Council', '{"email": "info@balinese-culture.org", "phone": "+62 361 234567"}', true),
+
+((SELECT id FROM islands WHERE slug = 'bali'), 'Ubud Food Festival', 'A culinary celebration showcasing Indonesia''s diverse food culture with cooking demonstrations, local ingredients, and traditional recipes from renowned chefs.', 'festival', '2024-09-20', '2024-09-22', '10:00', '22:00', 'Ubud Cultural Center', '{"lat": -8.5069, "lng": 115.2624}', '/placeholder.svg?height=400&width=600', 35.00, 'https://ubudfoodfestival.com', 'Ubud Food Festival Committee', '{"email": "info@ubudfoodfestival.com", "phone": "+62 361 987654"}', true),
+
+-- Maldives Events
+((SELECT id FROM islands WHERE slug = 'maldives'), 'Maldivian Heritage Festival', 'Celebrate the rich maritime culture of the Maldives with traditional dhoni boat races, local crafts, and authentic Maldivian cuisine and music.', 'cultural', '2024-08-05', '2024-08-07', '09:00', '20:00', 'Malé Waterfront', '{"lat": 4.1755, "lng": 73.5093}', '/placeholder.svg?height=400&width=600', 25.00, 'https://maldives-heritage.mv', 'Maldivian Heritage Foundation', '{"email": "heritage@maldives.mv", "phone": "+960 330 1234"}', true),
+
+-- Maui Events
+((SELECT id FROM islands WHERE slug = 'maui'), 'Maui Film Festival', 'An outdoor cinema experience under the Hawaiian stars, featuring independent films, documentaries, and celebrity appearances in paradise.', 'festival', '2024-06-12', '2024-06-16', '19:00', '23:00', 'Wailea Golf Course', '{"lat": 20.6900, "lng": -156.4400}', '/placeholder.svg?height=400&width=600', 85.00, 'https://mauifilmfestival.com', 'Maui Film Festival Organization', '{"email": "info@mauifilmfestival.com", "phone": "+1 808 579 9244"}', true),
+
+((SELECT id FROM islands WHERE slug = 'maui'), 'Aloha Festivals Maui', 'Hawaii''s premier cultural celebration featuring traditional hula, live Hawaiian music, local food, and the spirit of aloha in a beautiful oceanfront setting.', 'cultural', '2024-09-14', '2024-09-15', '10:00', '21:00', 'Lahaina Banyan Court Park', '{"lat": 20.8783, "lng": -156.6825}', '/placeholder.svg?height=400&width=600', 0.00, null, 'Aloha Festivals Hawaii', '{"email": "maui@alohafestivals.com", "phone": "+1 808 589 1771"}', true),
+
+-- Seychelles Events
+((SELECT id FROM islands WHERE slug = 'seychelles'), 'Festival Kreol', 'The vibrant celebration of Creole culture featuring music, dance, art, and cuisine from across the Indian Ocean region.', 'cultural', '2024-10-25', '2024-10-29', '18:00', '23:00', 'Victoria Market Street', '{"lat": -4.6191, "lng": 55.4513}', '/placeholder.svg?height=400&width=600', 20.00, 'https://festivalkreol.sc', 'Seychelles Tourism Board', '{"email": "kreol@seychelles.travel", "phone": "+248 4 671 300"}', true),
+
+-- Additional events for variety
+((SELECT id FROM islands WHERE slug = 'santorini'), 'Santorini Jazz Festival', 'International jazz artists perform in intimate venues across the island, from clifftop terraces to traditional tavernas.', 'concert', '2024-07-05', '2024-07-07', '20:00', '01:00', 'Various Venues', '{"lat": 36.3932, "lng": 25.4615}', '/placeholder.svg?height=400&width=600', 55.00, 'https://santorini-jazz.com', 'Santorini Jazz Society', '{"email": "jazz@santorini.gr", "phone": "+30 22860 25678"}', false),
+
+((SELECT id FROM islands WHERE slug = 'bali'), 'Bali Spirit Festival', 'A transformative celebration of yoga, dance, and world music in the heart of Ubud''s spiritual landscape.', 'festival', '2024-03-21', '2024-03-24', '07:00', '22:00', 'Ubud Yoga Barn', '{"lat": -8.5069, "lng": 115.2624}', '/placeholder.svg?height=400&width=600', 120.00, 'https://balispiritfestival.com', 'BaliSpirit', '{"email": "info@balispiritfestival.com", "phone": "+62 361 123456"}', false);
