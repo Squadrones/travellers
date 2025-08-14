@@ -107,13 +107,13 @@ const mockClient = {
             sampleData = [
               {
                 id: 1,
-                name: "Maldives Music Festival",
+                title: "Maldives Music Festival", // Changed from 'name' to 'title'
                 description: "Annual music festival featuring international and local artists",
                 start_date: "2024-06-15",
                 end_date: "2024-06-17",
                 location: "Male, Maldives",
                 price: 150,
-                category: "Music",
+                event_type: "Music", // Changed from 'category' to 'event_type'
                 featured: true,
                 image_url: "/maldives-sunset-beach-aerial.png",
                 islands: {
@@ -124,13 +124,13 @@ const mockClient = {
               },
               {
                 id: 2,
-                name: "Bora Bora Cultural Festival",
+                title: "Bora Bora Cultural Festival", // Changed from 'name' to 'title'
                 description: "Celebrate Polynesian culture with traditional dance and food",
                 start_date: "2024-07-20",
                 end_date: "2024-07-22",
                 location: "Vaitape, Bora Bora",
                 price: 75,
-                category: "Cultural",
+                event_type: "Cultural", // Changed from 'category' to 'event_type'
                 featured: true,
                 image_url: "/bora-bora-lagoon-aerial.png",
                 islands: {
@@ -141,13 +141,13 @@ const mockClient = {
               },
               {
                 id: 3,
-                name: "Santorini Wine Tasting",
+                title: "Santorini Wine Tasting", // Changed from 'name' to 'title'
                 description: "Exclusive wine tasting experience with sunset views",
                 start_date: "2024-08-10",
                 end_date: "2024-08-10",
                 location: "Oia, Santorini",
                 price: 120,
-                category: "Food & Drink",
+                event_type: "Food & Drink", // Changed from 'category' to 'event_type'
                 featured: false,
                 image_url: "/santorini-peak-ocean.png",
                 islands: {
