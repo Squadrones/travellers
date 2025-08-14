@@ -6,13 +6,13 @@ const steps = [
     icon: MapPin,
     title: "Choose Your Islands",
     description: "Discover your paradise—explore our stunning island destinations and select your favorites.",
-    color: "text-emerald-600",
+    color: "text-ocean-600",
   },
   {
     icon: Calendar,
     title: "Set Your Dates",
     description: "Pick your travel dates and duration to create the perfect timeline for your adventure.",
-    color: "text-teal-600",
+    color: "text-ocean-600",
   },
   {
     icon: Activity,
@@ -24,19 +24,19 @@ const steps = [
     icon: Heart,
     title: "Get Recommendations",
     description: "Your dream trip awaits—personalized recommendations based on your preferences.",
-    color: "text-blue-600",
+    color: "text-ocean-700",
   },
   {
     icon: Share2,
     title: "Share & Collaborate",
     description: "Share your itinerary with travel companions and plan together in real-time.",
-    color: "text-indigo-600",
+    color: "text-ocean-800",
   },
   {
     icon: Download,
     title: "Export Your Plan",
     description: "Download your complete itinerary with all bookings, maps, and travel information.",
-    color: "text-purple-600",
+    color: "text-cyan-700",
   },
 ]
 
@@ -56,10 +56,10 @@ export function TripPlanningSteps() {
           {steps.map((step, index) => (
             <Card key={index} className="island-card p-8 text-center group">
               <div className="mb-6">
-                <div className="w-20 h-20 bg-gradient-to-br from-emerald-100 to-teal-100 dark:from-emerald-800 dark:to-teal-800 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="w-20 h-20 bg-gradient-to-br from-ocean-100 to-cyan-100 dark:from-ocean-800 dark:to-cyan-800 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                   <step.icon className={`w-10 h-10 ${step.color}`} />
                 </div>
-                <div className="w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center mx-auto text-sm font-bold">
+                <div className="w-8 h-8 bg-ocean-600 text-white rounded-full flex items-center justify-center mx-auto text-sm font-bold">
                   {index + 1}
                 </div>
               </div>

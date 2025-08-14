@@ -171,8 +171,8 @@ export function EnhancedItineraryBuilder() {
 
   const filteredItems = availableItems.filter((item) => {
     const matchesSearch =
-      item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase())
+      (item.title?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+      (item.description?.toLowerCase() || "").includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategory === "all" || item.category === selectedCategory
     return matchesSearch && matchesCategory
   })

@@ -30,7 +30,15 @@ import {
   AlertCircle,
 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
-import { format } from "date-fns"
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+}
 
 interface Activity {
   id: number
@@ -425,7 +433,7 @@ export function ActivityBookingSystem() {
                                           className="w-full justify-start text-left font-normal bg-transparent"
                                         >
                                           <CalendarIcon className="mr-2 h-4 w-4" />
-                                          {bookingDetails.date ? format(bookingDetails.date, "PPP") : "Pick a date"}
+                                          {bookingDetails.date ? formatDate(bookingDetails.date) : "Pick a date"}
                                         </Button>
                                       </PopoverTrigger>
                                       <PopoverContent className="w-auto p-0">
@@ -592,7 +600,7 @@ export function ActivityBookingSystem() {
                                     </div>
                                     <div className="flex justify-between">
                                       <span>Date:</span>
-                                      <span>{format(bookingDetails.date, "PPP")}</span>
+                                      <span>{formatDate(bookingDetails.date)}</span>
                                     </div>
                                     <div className="flex justify-between">
                                       <span>Time:</span>
