@@ -138,7 +138,7 @@ export default function EventCard({ event }: EventCardProps) {
 
         {/* Action Buttons */}
         <div className="flex gap-2">
-          <Link href={`/events/${event.slug}`} className="flex-1">
+          <Link href={`/events/${event.id}`} className="flex-1">
             <Button className="w-full bg-cyan-600 hover:bg-cyan-700 text-white">View Details</Button>
           </Link>
           {event.ticket_url && (

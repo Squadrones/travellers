@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         location
       )
     `)
-    .eq("slug", params.slug)
+    .eq("id", params.slug)
     .single()
 
   if (!event) {
@@ -48,7 +48,7 @@ export default async function EventDetailPage({ params }: { params: { slug: stri
         location
       )
     `)
-    .eq("slug", params.slug)
+    .eq("id", params.slug)
     .single()
 
   if (error || !event) {
