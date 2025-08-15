@@ -7,7 +7,7 @@ import { Calendar, MapPin, Clock, Ticket } from "lucide-react"
 import Link from "next/link"
 
 interface EventsHeroProps {
-  featuredEvents: (Event & { islands: { name: string; slug: string; location: string } })[]
+  featuredEvents: (Event & { islands?: { name: string; slug: string; location: string } | null })[]
 }
 
 export default function EventsHero({ featuredEvents }: EventsHeroProps) {
@@ -97,7 +97,7 @@ export default function EventsHero({ featuredEvents }: EventsHeroProps) {
           <div className="text-center">
             <MapPin className="h-6 w-6 mx-auto mb-2 text-cyan-300" />
             <div className="text-sm text-white/80">Location</div>
-            <div className="font-semibold">{currentEvent.islands.name}</div>
+            <div className="font-semibold">{currentEvent.islands?.name || "Location TBD"}</div>
           </div>
 
           <div className="text-center">
@@ -109,7 +109,7 @@ export default function EventsHero({ featuredEvents }: EventsHeroProps) {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <Link href={`/events/${currentEvent.id}`}>
+          <Link href={`/events/${currentEvent.slug}`}>
             <Button size="lg" className="bg-violet-500 hover:bg-violet-600 text-white px-8 py-4 text-lg font-semibold">
               View Event Details
             </Button>

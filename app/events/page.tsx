@@ -23,7 +23,6 @@ export default async function EventsPage() {
         location
       )
     `)
-    .gte("start_date", new Date().toISOString().split("T")[0])
     .order("start_date", { ascending: true })
 
   if (error) {
@@ -42,7 +41,6 @@ export default async function EventsPage() {
       )
     `)
     .eq("featured", true)
-    .gte("start_date", new Date().toISOString().split("T")[0])
     .order("start_date", { ascending: true })
     .limit(6)
 

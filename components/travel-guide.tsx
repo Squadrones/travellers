@@ -150,6 +150,83 @@ export default function TravelGuide({ island }: TravelGuideProps) {
             </CardContent>
           </Card>
         </div>
+
+        <div className="mt-16">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-bold text-gray-900 mb-4">Tourist Guidelines & Rules</h3>
+            <p className="text-lg text-gray-600">Important guidelines to ensure a respectful and enjoyable visit</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Card className="border-green-200">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-green-700">
+                  <div className="p-2 bg-green-100 rounded-lg">
+                    <AlertTriangle className="h-5 w-5 text-green-600" />
+                  </div>
+                  Do's - Respectful Practices
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3">
+                  {island.tourist_rules
+                    ?.filter((_, index) => index < Math.ceil(island.tourist_rules.length / 2))
+                    .map((rule, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                        <span className="text-gray-700">{rule}</span>
+                      </li>
+                    ))}
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="border-orange-200">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-orange-700">
+                  <div className="p-2 bg-orange-100 rounded-lg">
+                    <AlertTriangle className="h-5 w-5 text-orange-600" />
+                  </div>
+                  Important Guidelines
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3">
+                  {island.tourist_rules
+                    ?.filter((_, index) => index >= Math.ceil(island.tourist_rules.length / 2))
+                    .map((rule, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
+                        <span className="text-gray-700">{rule}</span>
+                      </li>
+                    ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="mt-8 bg-blue-50 p-6 rounded-lg">
+            <h4 className="text-lg font-semibold text-blue-900 mb-3">Emergency Contacts</h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="text-center">
+                <p className="text-blue-700 font-medium">Police</p>
+                <p className="text-blue-900 font-bold">{island.emergency_contacts?.police}</p>
+              </div>
+              <div className="text-center">
+                <p className="text-blue-700 font-medium">Medical Emergency</p>
+                <p className="text-blue-900 font-bold">{island.emergency_contacts?.medical}</p>
+              </div>
+              <div className="text-center">
+                <p className="text-blue-700 font-medium">Tourist Helpline</p>
+                <p className="text-blue-900 font-bold">
+                  {island.emergency_contacts?.tourist_helpline ||
+                    island.emergency_contacts?.tourist_police ||
+                    "Contact Hotel"}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   )

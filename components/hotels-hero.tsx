@@ -69,7 +69,7 @@ export default function HotelsHero({ featuredHotels }: HotelsHeroProps) {
 
         <div className="flex items-center justify-center gap-2 mb-6">
           <MapPin className="h-5 w-5 text-cyan-300" />
-          <span className="text-cyan-300 font-medium">{currentHotel.islands.name}</span>
+          <span className="text-cyan-300 font-medium">{currentHotel.islands?.name || "Location TBD"}</span>
         </div>
 
         <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed text-center">

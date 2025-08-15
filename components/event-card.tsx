@@ -4,7 +4,7 @@ import { Calendar, Clock, MapPin, Ticket, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface EventCardProps {
-  event: Event & { islands: { name: string; slug: string; location: string } }
+  event: Event & { islands?: { name: string; slug: string; location: string } | null }
 }
 
 export default function EventCard({ event }: EventCardProps) {
@@ -117,7 +117,8 @@ export default function EventCard({ event }: EventCardProps) {
           <div className="flex items-center text-sm text-gray-500">
             <MapPin className="h-4 w-4 mr-2" />
             <span>
-              {event.location}, {event.islands.name}
+              {event.location}
+              {event.islands?.name ? `, ${event.islands.name}` : ""}
             </span>
           </div>
 
@@ -137,7 +138,7 @@ export default function EventCard({ event }: EventCardProps) {
 
         {/* Action Buttons */}
         <div className="flex gap-2">
-          <Link href={`/events/${event.id}`} className="flex-1">
+          <Link href={`/events/${event.slug}`} className="flex-1">
             <Button className="w-full bg-cyan-600 hover:bg-cyan-700 text-white">View Details</Button>
           </Link>
           {event.ticket_url && (

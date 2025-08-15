@@ -6,7 +6,7 @@ import EventCard from "./event-card"
 import EventFilters from "./event-filters"
 
 interface EventsListingProps {
-  events: (Event & { islands: { name: string; slug: string; location: string } })[]
+  events: (Event & { islands: { name: string; slug: string; location: string } | null })[]
 }
 
 export default function EventsListing({ events }: EventsListingProps) {
@@ -32,7 +32,7 @@ export default function EventsListing({ events }: EventsListingProps) {
       }
 
       // Island filter
-      if (selectedIslands.length > 0 && !selectedIslands.includes(event.islands.slug)) {
+      if (selectedIslands.length > 0 && (!event.islands || !selectedIslands.includes(event.islands.slug))) {
         return false
       }
 
@@ -50,7 +50,13 @@ export default function EventsListing({ events }: EventsListingProps) {
 
   // Get unique event types and islands for filters
   const eventTypes = [...new Set(events.map((event) => event.event_type))]
-  const islands = [...new Set(events.map((event) => ({ slug: event.islands.slug, name: event.islands.name })))]
+  const islands = [
+    ...new Set(
+      events
+        .filter((event) => event.islands)
+        .map((event) => ({ slug: event.islands!.slug, name: event.islands!.name })),
+    ),
+  ]
 
   return (
     <section className="py-20 bg-gray-50">

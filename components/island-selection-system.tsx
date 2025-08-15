@@ -398,7 +398,7 @@ export function IslandSelectionSystem({ selectedIslands, onIslandSelect, onIslan
                         <tr className="border-b">
                           <td className="py-3 px-4 font-medium">Climate</td>
                           {selectedIslands.map((island) => (
-                            <td key={island.id} className="py-3 px-4">
+                            <td key={`climate-${island.id}`} className="py-3 px-4">
                               {island.climate}
                             </td>
                           ))}
@@ -406,7 +406,7 @@ export function IslandSelectionSystem({ selectedIslands, onIslandSelect, onIslan
                         <tr className="border-b">
                           <td className="py-3 px-4 font-medium">Price Range</td>
                           {selectedIslands.map((island) => (
-                            <td key={island.id} className="py-3 px-4">
+                            <td key={`price-${island.id}`} className="py-3 px-4">
                               {island.price_range}
                             </td>
                           ))}
@@ -414,7 +414,7 @@ export function IslandSelectionSystem({ selectedIslands, onIslandSelect, onIslan
                         <tr className="border-b">
                           <td className="py-3 px-4 font-medium">Rating</td>
                           {selectedIslands.map((island) => (
-                            <td key={island.id} className="py-3 px-4">
+                            <td key={`rating-${island.id}`} className="py-3 px-4">
                               <div className="flex items-center gap-1">
                                 <Star className="w-4 h-4 text-yellow-500 fill-current" />
                                 {island.rating?.toFixed(1)}
@@ -425,7 +425,7 @@ export function IslandSelectionSystem({ selectedIslands, onIslandSelect, onIslan
                         <tr className="border-b">
                           <td className="py-3 px-4 font-medium">Population</td>
                           {selectedIslands.map((island) => (
-                            <td key={island.id} className="py-3 px-4">
+                            <td key={`population-${island.id}`} className="py-3 px-4">
                               {(island.population / 1000).toFixed(0)}K
                             </td>
                           ))}
@@ -433,7 +433,7 @@ export function IslandSelectionSystem({ selectedIslands, onIslandSelect, onIslan
                         <tr>
                           <td className="py-3 px-4 font-medium">Top Activities</td>
                           {selectedIslands.map((island) => (
-                            <td key={island.id} className="py-3 px-4">
+                            <td key={`activities-${island.id}`} className="py-3 px-4">
                               <div className="flex flex-wrap gap-1">
                                 {island.activities?.slice(0, 2).map((activity) => (
                                   <Badge key={activity} variant="secondary" className="text-xs">
