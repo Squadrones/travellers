@@ -41,6 +41,12 @@ Lombok Island is a modern, interactive travel platform that allows users to expl
 - **Activity Integration**: Seamlessly add islands, events, hotels, and activities
 - **Budget Management**: Track expenses and set budget constraints
 - **Export Options**: Download and share your travel plans
+- **Trip Persistence**: Save trips to database with unique shareable URLs
+- **PDF Export**: Generate professional PDF itineraries for offline use
+- **Trip Sharing**: Share trips via short, memorable URLs
+- **Collaboration**: Add collaborators to work on trips together
+- **Public Gallery**: Discover and get inspired by trips shared by other travelers
+- **Comments & Social**: Leave feedback and discuss trip plans
 
 ### 🏨 **Hotel & Accommodation**
 - **Comprehensive Hotel Listings**: Detailed information about accommodations
@@ -115,6 +121,9 @@ psql -f scripts/02-seed-islands.sql
 psql -f scripts/03-seed-destinations.sql
 psql -f scripts/04-seed-events.sql
 psql -f scripts/05-seed-hotels.sql
+
+# 3. Set up trip system (NEW!)
+psql -f scripts/10-create-trips-table.sql
 ```
 
 ### 5. **Start Development Server**

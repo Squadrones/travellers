@@ -17,7 +17,7 @@ export function TripPlanningHero() {
         </div>
 
         <div className="flex flex-wrap justify-center gap-4 mb-12">
-          <Button className="ocean-button text-lg px-8 py-4">
+          <Button className="ocean-button text-lg px-8 py-4" variant="default">
             <Compass className="w-5 h-5 mr-2" />
             Start Planning
           </Button>

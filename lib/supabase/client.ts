@@ -4,6 +4,9 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 interface QueryBuilder {
   select: (columns?: string) => QueryBuilder
+  insert: (data: any) => QueryBuilder
+  update: (data: any) => QueryBuilder
+  delete: () => QueryBuilder
   eq: (column: string, value: any) => QueryBuilder
   neq: (column: string, value: any) => QueryBuilder
   gte: (column: string, value: any) => QueryBuilder
@@ -11,6 +14,10 @@ interface QueryBuilder {
   limit: (count: number) => QueryBuilder
   single: () => Promise<{ data: any; error: any }>
   then: (resolve: (result: { data: any; error: any }) => void) => void
+  _insertData?: any
+  _updateData?: any
+  _deleteFlag?: boolean
+  execute: () => Promise<{ data: any; error: any }>
 }
 
 function createQueryBuilder(tableName: string): QueryBuilder {
@@ -24,9 +31,98 @@ function createQueryBuilder(tableName: string): QueryBuilder {
       selectColumns = columns
       return queryBuilder
     },
+    insert: (data) => {
+      // Store insert data for later execution
+      queryBuilder._insertData = data
+      return queryBuilder
+    },
+    update: (data) => {
+      // Store update data for later execution
+      queryBuilder._updateData = data
+      return queryBuilder
+    },
+    delete: () => {
+      // Mark for deletion, will be executed when execute() is called
+      queryBuilder._deleteFlag = true
+      return queryBuilder
+    },
     eq: (column, value) => {
       filters.push(`${column}=eq.${value}`)
       return queryBuilder
+    },
+    execute: async () => {
+      if (queryBuilder._insertData) {
+        // Execute insert
+        try {
+          const response = await fetch(`${supabaseUrl}/rest/v1/${tableName}`, {
+            method: 'POST',
+            headers: {
+              apikey: supabaseAnonKey,
+              Authorization: `Bearer ${supabaseAnonKey}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=representation'
+            },
+            body: JSON.stringify(queryBuilder._insertData)
+          })
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+          }
+          
+          const result = await response.json()
+          return { data: result, error: null }
+        } catch (error) {
+          return { data: null, error }
+        }
+      } else if (queryBuilder._updateData) {
+        // Execute update
+        try {
+          const queryString = filters.length > 0 ? `?${filters.join("&")}` : ""
+          const response = await fetch(`${supabaseUrl}/rest/v1/${tableName}${queryString}`, {
+            method: 'PATCH',
+            headers: {
+              apikey: supabaseAnonKey,
+              Authorization: `Bearer ${supabaseAnonKey}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=representation'
+            },
+            body: JSON.stringify(queryBuilder._updateData)
+          })
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+          }
+          
+          const result = await response.json()
+          return { data: result, error: null }
+        } catch (error) {
+          return { data: null, error }
+        }
+      } else if (queryBuilder._deleteFlag) {
+        // Execute delete
+        try {
+          const queryString = filters.length > 0 ? `?${filters.join("&")}` : ""
+          const response = await fetch(`${supabaseUrl}/rest/v1/${tableName}${queryString}`, {
+            method: 'DELETE',
+            headers: {
+              apikey: supabaseAnonKey,
+              Authorization: `Bearer ${supabaseAnonKey}`,
+              'Content-Type': 'application/json'
+            }
+          })
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+          }
+          
+          return { data: null, error: null }
+        } catch (error) {
+          return { data: null, error }
+        }
+      } else {
+        // Execute select query
+        return await executeQuery()
+      }
     },
     neq: (column, value) => {
       filters.push(`${column}=neq.${value}`)

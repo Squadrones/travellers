@@ -7,8 +7,10 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Calendar, MapPin, Clock, Plus, Trash2, Save, Download, Users, DollarSign, Search } from "lucide-react"
+import { Calendar, MapPin, Clock, Plus, Trash2, Save, Download, Users, DollarSign, Search, Share2, CheckCircle } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
+import { TripService } from "@/lib/services/trip-service"
+import { generatePDFContent, downloadPDF, createShareableUrl, copyToClipboard } from "@/lib/utils"
 
 interface ItineraryItem {
   id: string
@@ -47,12 +49,82 @@ export function EnhancedItineraryBuilder() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [savedTripId, setSavedTripId] = useState<string | null>(null)
+  const [shareUrl, setShareUrl] = useState("")
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [dateError, setDateError] = useState<string>("")
 
   const supabase = createClient()
 
   useEffect(() => {
     loadAvailableItems()
   }, [])
+
+  // Calculate total days with proper validation
+  const calculateTotalDays = () => {
+    if (!tripDetails.startDate || !tripDetails.endDate) {
+      return 1 // Start with 1 day if no dates set
+    }
+
+    const startDate = new Date(tripDetails.startDate)
+    const endDate = new Date(tripDetails.endDate)
+    
+    // Validate dates
+    if (startDate >= endDate) {
+      return 1 // Return 1 day if invalid date range
+    }
+
+    const timeDiff = endDate.getTime() - startDate.getTime()
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1
+    
+    return Math.max(1, daysDiff) // Ensure at least 1 day
+  }
+
+  // Validate dates and update error state
+  const validateDates = () => {
+    if (!tripDetails.startDate || !tripDetails.endDate) {
+      setDateError("")
+      return true
+    }
+
+    const startDate = new Date(tripDetails.startDate)
+    const endDate = new Date(tripDetails.endDate)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    if (startDate < today) {
+      setDateError("Start date cannot be in the past")
+      return false
+    }
+
+    if (startDate >= endDate) {
+      setDateError("End date must be after start date")
+      return false
+    }
+
+    const timeDiff = endDate.getTime() - startDate.getTime()
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1
+
+    if (daysDiff > 30) {
+      setDateError("Trip cannot exceed 30 days")
+      return false
+    }
+
+    setDateError("")
+    return true
+  }
+
+  // Handle date changes with validation
+  const handleDateChange = (field: 'startDate' | 'endDate', value: string) => {
+    const newTripDetails = { ...tripDetails, [field]: value }
+    setTripDetails(newTripDetails)
+    
+    // Validate dates after a short delay to allow user to finish typing
+    setTimeout(() => {
+      validateDates()
+    }, 500)
+  }
 
   const loadAvailableItems = async () => {
     try {
@@ -71,7 +143,7 @@ export function EnhancedItineraryBuilder() {
 
       // Convert islands to itinerary items
       if (islands) {
-        islands.forEach((island) => {
+        islands.forEach((island: any) => {
           items.push({
             id: `island-${island.id}`,
             type: "island",
@@ -91,7 +163,7 @@ export function EnhancedItineraryBuilder() {
 
       // Convert events to itinerary items
       if (events) {
-        events.forEach((event) => {
+        events.forEach((event: any) => {
           items.push({
             id: `event-${event.id}`,
             type: "event",
@@ -111,7 +183,7 @@ export function EnhancedItineraryBuilder() {
 
       // Convert hotels to itinerary items
       if (hotels) {
-        hotels.forEach((hotel) => {
+        hotels.forEach((hotel: any) => {
           items.push({
             id: `hotel-${hotel.id}`,
             type: "hotel",
@@ -144,6 +216,11 @@ export function EnhancedItineraryBuilder() {
       day: selectedDay,
     }
     setItinerary([...itinerary, newItem])
+    
+    // If adding to a day beyond current range, update selected day to show the new content
+    if (selectedDay > totalDays) {
+      setSelectedDay(selectedDay)
+    }
   }
 
   const removeFromItinerary = (id: string) => {
@@ -152,6 +229,11 @@ export function EnhancedItineraryBuilder() {
 
   const moveItemToDay = (itemId: string, newDay: number) => {
     setItinerary(itinerary.map((item) => (item.id === itemId ? { ...item, day: newDay } : item)))
+  }
+
+  const addNewDay = () => {
+    const newDay = totalDays + 1
+    setSelectedDay(newDay)
   }
 
   const getTypeColor = (type: string) => {
@@ -177,16 +259,105 @@ export function EnhancedItineraryBuilder() {
     return matchesSearch && matchesCategory
   })
 
-  const totalCost = itinerary.reduce((sum, item) => sum + item.price, 0)
-  const totalDays =
-    tripDetails.startDate && tripDetails.endDate
-      ? Math.ceil(
-          (new Date(tripDetails.endDate).getTime() - new Date(tripDetails.startDate).getTime()) / (1000 * 60 * 60 * 24),
-        ) + 1
-      : 7
-
+  // Get items for a specific day
   const getItemsForDay = (day: number) => {
     return itinerary.filter((item) => item.day === day).sort((a, b) => a.time.localeCompare(b.time))
+  }
+
+  // Get the maximum day number from itinerary items
+  const getMaxDayFromItinerary = () => {
+    if (itinerary.length === 0) return 1
+    return Math.max(...itinerary.map(item => item.day))
+  }
+
+  const totalCost = itinerary.reduce((sum, item) => sum + item.price, 0)
+  // Calculate total days considering both dates and itinerary
+  const totalDays = Math.max(calculateTotalDays(), getMaxDayFromItinerary())
+
+  const saveTrip = async () => {
+    if (itinerary.length === 0) {
+      alert("Please add some items to your itinerary before saving")
+      return
+    }
+
+    if (!validateDates()) {
+      alert("Please fix the date validation errors before saving")
+      return
+    }
+
+    setSaving(true)
+    try {
+      const tripData = {
+        name: tripDetails.name,
+        description: `A ${totalDays}-day island adventure with ${itinerary.length} activities`,
+        start_date: tripDetails.startDate || null,
+        end_date: tripDetails.endDate || null,
+        travelers: tripDetails.travelers,
+        budget: tripDetails.budget,
+        is_public: true,
+        allow_comments: true,
+        allow_collaboration: false,
+        tags: ["Island Adventure", "Travel", "Vacation"]
+      }
+
+      const itineraryData = itinerary.map((item, index) => ({
+        type: item.type,
+        title: item.title,
+        description: item.description,
+        day: item.day,
+        time: item.time,
+        duration: item.duration,
+        location: item.location,
+        price: item.price,
+        image_url: item.image,
+        category: item.category,
+        rating: item.rating,
+        external_id: item.id,
+        external_type: item.type,
+        sort_order: index
+      }))
+
+      const result = await TripService.saveTrip(tripData, itineraryData)
+      
+      if (result) {
+        setSavedTripId(result.trip.id)
+        const shareableUrl = createShareableUrl(result.shortId)
+        setShareUrl(shareableUrl)
+        setShowSuccess(true)
+        
+        // Hide success message after 5 seconds
+        setTimeout(() => setShowSuccess(false), 5000)
+      } else {
+        alert("Failed to save trip. Please try again.")
+      }
+    } catch (error) {
+      console.error("Error saving trip:", error)
+      alert("Error saving trip. Please try again.")
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const exportToPDF = () => {
+    if (itinerary.length === 0) {
+      alert("Please add some items to your itinerary before exporting")
+      return
+    }
+
+    const pdfContent = generatePDFContent(tripDetails, itinerary)
+    downloadPDF(pdfContent, `${tripDetails.name.replace(/\s+/g, '-')}-itinerary`)
+  }
+
+  const copyShareUrl = async () => {
+    if (shareUrl) {
+      try {
+        await copyToClipboard(shareUrl)
+        alert("Share URL copied to clipboard!")
+      } catch (error) {
+        console.error("Error copying to clipboard:", error)
+        alert("Failed to copy URL. Please copy it manually.")
+      }
+    }
   }
 
   return (
@@ -199,6 +370,43 @@ export function EnhancedItineraryBuilder() {
             accommodations to craft the perfect trip.
           </p>
         </div>
+
+        {/* Success Message */}
+        {showSuccess && (
+          <Card className="p-6 mb-8 border-green-200 bg-green-50 dark:bg-green-950 dark:border-green-800">
+            <div className="flex items-center gap-3">
+              <CheckCircle className="w-6 h-6 text-green-600" />
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-green-800 dark:text-green-200">Trip Saved Successfully!</h3>
+                <p className="text-green-700 dark:text-green-300">
+                  Your trip has been saved and can now be shared with others.
+                </p>
+              </div>
+            </div>
+            {shareUrl && (
+              <div className="mt-4 p-3 bg-white dark:bg-green-900 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Share2 className="w-4 h-4 text-green-600" />
+                  <span className="text-sm font-medium text-green-800 dark:text-green-200">Share URL:</span>
+                </div>
+                <div className="flex gap-2">
+                  <Input 
+                    value={shareUrl} 
+                    readOnly 
+                    className="flex-1 text-sm"
+                  />
+                  <Button 
+                    size="sm" 
+                    onClick={copyShareUrl}
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    Copy
+                  </Button>
+                </div>
+              </div>
+            )}
+          </Card>
+        )}
 
         {/* Trip Details */}
         <Card className="p-6 mb-8">
@@ -219,7 +427,8 @@ export function EnhancedItineraryBuilder() {
                 id="start-date"
                 type="date"
                 value={tripDetails.startDate}
-                onChange={(e) => setTripDetails({ ...tripDetails, startDate: e.target.value })}
+                onChange={(e) => handleDateChange('startDate', e.target.value)}
+                min={new Date().toISOString().split('T')[0]}
               />
             </div>
             <div>
@@ -228,7 +437,8 @@ export function EnhancedItineraryBuilder() {
                 id="end-date"
                 type="date"
                 value={tripDetails.endDate}
-                onChange={(e) => setTripDetails({ ...tripDetails, endDate: e.target.value })}
+                onChange={(e) => handleDateChange('endDate', e.target.value)}
+                min={tripDetails.startDate || new Date().toISOString().split('T')[0]}
               />
             </div>
             <div>
@@ -237,11 +447,20 @@ export function EnhancedItineraryBuilder() {
                 id="travelers"
                 type="number"
                 min="1"
+                max="20"
                 value={tripDetails.travelers}
                 onChange={(e) => setTripDetails({ ...tripDetails, travelers: Number.parseInt(e.target.value) })}
               />
             </div>
           </div>
+          
+          {/* Date Validation Error */}
+          {dateError && (
+            <div className="mt-4 p-3 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
+              <p className="text-red-700 dark:text-red-300 text-sm">{dateError}</p>
+            </div>
+          )}
+
           <div className="flex items-center justify-between mt-6 p-4 bg-emerald-50 dark:bg-emerald-950 rounded-lg">
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
@@ -253,6 +472,11 @@ export function EnhancedItineraryBuilder() {
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-emerald-600" />
                 <span className="font-medium">{totalDays} Days</span>
+                {tripDetails.startDate && tripDetails.endDate && (
+                  <span className="text-sm text-muted-foreground">
+                    ({new Date(tripDetails.startDate).toLocaleDateString()} - {new Date(tripDetails.endDate).toLocaleDateString()})
+                  </span>
+                )}
               </div>
               <div className="flex items-center gap-2">
                 <Users className="w-5 h-5 text-emerald-600" />
@@ -260,13 +484,23 @@ export function EnhancedItineraryBuilder() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={saveTrip}
+                disabled={saving || itinerary.length === 0 || !!dateError}
+              >
                 <Save className="w-4 h-4 mr-2" />
-                Save Trip
+                {saving ? "Saving..." : "Save Trip"}
               </Button>
-              <Button size="sm" className="ocean-button">
+              <Button 
+                size="sm" 
+                className="ocean-button"
+                onClick={exportToPDF}
+                disabled={itinerary.length === 0}
+              >
                 <Download className="w-4 h-4 mr-2" />
-                Export
+                Export PDF
               </Button>
             </div>
           </div>
@@ -356,16 +590,41 @@ export function EnhancedItineraryBuilder() {
                   <Calendar className="w-5 h-5 mr-2 text-emerald-600" />
                   Your Itinerary
                 </h3>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={addNewDay}
+                  className="flex items-center gap-2"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Day
+                </Button>
               </div>
 
               <Tabs value={selectedDay.toString()} onValueChange={(value) => setSelectedDay(Number.parseInt(value))}>
-                <TabsList className="grid w-full grid-cols-7 mb-6">
-                  {Array.from({ length: totalDays }, (_, i) => i + 1).map((day) => (
-                    <TabsTrigger key={day} value={day.toString()} className="text-sm">
-                      Day {day}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
+                <div className="flex items-center gap-2 mb-6">
+                  <TabsList className="grid w-full grid-cols-7">
+                    {Array.from({ length: totalDays }, (_, i) => i + 1).map((day) => (
+                      <TabsTrigger key={day} value={day.toString()} className="text-sm">
+                        Day {day}
+                        {getItemsForDay(day).length > 0 && (
+                          <Badge variant="secondary" className="ml-2 text-xs">
+                            {getItemsForDay(day).length}
+                          </Badge>
+                        )}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={addNewDay}
+                    className="ml-2 p-2"
+                    title="Add new day"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
 
                 {Array.from({ length: totalDays }, (_, i) => i + 1).map((day) => (
                   <TabsContent key={day} value={day.toString()}>
@@ -377,6 +636,16 @@ export function EnhancedItineraryBuilder() {
                           <p className="text-muted-foreground">
                             Add activities, destinations, or accommodations to this day.
                           </p>
+                          <div className="mt-4">
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => setSelectedDay(day)}
+                            >
+                              <Plus className="w-4 h-4 mr-2" />
+                              Add Items
+                            </Button>
+                          </div>
                         </div>
                       ) : (
                         getItemsForDay(day).map((item, index) => (

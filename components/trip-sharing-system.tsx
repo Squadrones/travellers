@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -30,6 +30,8 @@ import {
   UserPlus,
   Heart,
 } from "lucide-react"
+import { TripService } from "@/lib/services/trip-service"
+import { createShareableUrl, copyToClipboard } from "@/lib/utils"
 
 interface TripData {
   id: string
@@ -135,6 +137,24 @@ export function TripSharingSystem() {
   const [sharedLink, setSharedLink] = useState("")
   const [activeTab, setActiveTab] = useState("share")
   const [collaboratorEmail, setCollaboratorEmail] = useState("")
+  const [publicTrips, setPublicTrips] = useState<any[]>([])
+  const [loadingTrips, setLoadingTrips] = useState(false)
+
+  useEffect(() => {
+    loadPublicTrips()
+  }, [])
+
+  const loadPublicTrips = async () => {
+    setLoadingTrips(true)
+    try {
+      const trips = await TripService.getPublicTrips(6)
+      setPublicTrips(trips)
+    } catch (error) {
+      console.error("Error loading public trips:", error)
+    } finally {
+      setLoadingTrips(false)
+    }
+  }
 
   const generateShareLink = () => {
     const link = `https://island-paradise.com/shared-trip/${currentTrip.id}`
@@ -507,56 +527,72 @@ export function TripSharingSystem() {
                   <h3 className="text-lg font-semibold mb-4">Discover Shared Trips</h3>
                   <p className="text-muted-foreground mb-6">Get inspired by amazing trips shared by other travelers</p>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {sampleSharedTrips.map((sharedTrip) => (
-                      <Card key={sharedTrip.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                        <div className="relative">
-                          <img
-                            src={sharedTrip.tripData.coverImage || "/placeholder.svg"}
-                            alt={sharedTrip.tripData.name}
-                            className="w-full h-32 object-cover"
-                          />
-                          <div className="absolute top-2 right-2">
-                            <Badge className="bg-white/90 text-gray-800">
-                              {sharedTrip.tripData.destinations.length} islands
-                            </Badge>
-                          </div>
-                        </div>
-
-                        <div className="p-4">
-                          <h4 className="font-semibold mb-2">{sharedTrip.tripData.name}</h4>
-                          <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                            {sharedTrip.tripData.description}
-                          </p>
-
-                          <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
-                            <span>by {sharedTrip.sharedBy}</span>
-                            <span>{sharedTrip.sharedDate}</span>
-                          </div>
-
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              <span className="flex items-center gap-1">
-                                <Eye className="w-3 h-3" />
-                                {sharedTrip.views}
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <Heart className="w-3 h-3" />
-                                {sharedTrip.likes}
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <MessageCircle className="w-3 h-3" />
-                                {sharedTrip.comments}
-                              </span>
+                  {loadingTrips ? (
+                    <div className="text-center py-8">
+                      <div className="animate-spin w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+                      <p className="text-muted-foreground">Loading shared trips...</p>
+                    </div>
+                  ) : publicTrips.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Globe className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                      <p>No public trips available yet. Be the first to share your adventure!</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {publicTrips.map((trip) => (
+                        <Card key={trip.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                          <div className="relative">
+                            <img
+                              src={trip.cover_image_url || "/placeholder.svg"}
+                              alt={trip.name}
+                              className="w-full h-32 object-cover"
+                            />
+                            <div className="absolute top-2 right-2">
+                              <Badge className="bg-white/90 text-gray-800">
+                                {trip.tags?.length || 0} tags
+                              </Badge>
                             </div>
-                            <Button size="sm" variant="outline">
-                              View Trip
-                            </Button>
                           </div>
-                        </div>
-                      </Card>
-                    ))}
-                  </div>
+
+                          <div className="p-4">
+                            <h4 className="font-semibold mb-2">{trip.name}</h4>
+                            <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                              {trip.description || "An amazing island adventure"}
+                            </p>
+
+                            <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
+                              <span>Created {new Date(trip.created_at).toLocaleDateString()}</span>
+                              <span>{trip.travelers} travelers</span>
+                            </div>
+
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                                <span className="flex items-center gap-1">
+                                  <Eye className="w-3 h-3" />
+                                  {trip.views_count || 0}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <Heart className="w-3 h-3" />
+                                  {trip.likes_count || 0}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <MessageCircle className="w-3 h-3" />
+                                  {trip.comments_count || 0}
+                                </span>
+                              </div>
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={() => window.open(`/trip/${trip.short_id}`, '_blank')}
+                              >
+                                View Trip
+                              </Button>
+                            </div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
                 </Card>
               </TabsContent>
             </Tabs>

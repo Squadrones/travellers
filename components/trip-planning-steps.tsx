@@ -54,7 +54,7 @@ export function TripPlanningSteps() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {steps.map((step, index) => (
-            <Card key={index} className="island-card p-8 text-center group">
+            <Card key={index} className="island-card p-8 text-center group" about='Trip Planning Step'>
               <div className="mb-6">
                 <div className="w-20 h-20 bg-gradient-to-br from-ocean-100 to-cyan-100 dark:from-ocean-800 dark:to-cyan-800 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                   <step.icon className={`w-10 h-10 ${step.color}`} />
