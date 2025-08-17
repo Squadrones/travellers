@@ -326,7 +326,7 @@ export default async function HotelDetailPage({ params }: HotelDetailPageProps) 
                       <img
                         src={
                           island.image_url ||
-                          `/placeholder.svg?height=200&width=300&query=${island.name} island paradise`
+                          `/placeholder.svg?height=200&width=300&query=${island.name} Lombok Island`
                         }
                         alt={island.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"

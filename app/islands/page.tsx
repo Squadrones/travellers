@@ -6,7 +6,7 @@ import Link from "next/link"
 import Image from "next/image"
 
 export const metadata = {
-  title: "All Islands - Island Paradise",
+  title: "All Islands - Lombok Island",
   description: "Discover all our beautiful island destinations with unique experiences and adventures.",
 }
 
@@ -76,7 +76,7 @@ export default async function IslandsPage() {
                   <Image
                     src={
                       island.image_url ||
-                      `/placeholder.svg?height=256&width=400&query=${island.name} tropical island paradise`
+                      `/placeholder.svg?height=256&width=400&query=${island.name} tropical Lombok Island`
                     }
                     alt={island.name}
                     fill

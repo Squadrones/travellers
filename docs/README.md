@@ -1,6 +1,6 @@
-# 📚 Island Paradise Documentation
+# 📚 Lombok Island Documentation
 
-Welcome to the Island Paradise project documentation. This directory contains comprehensive guides and references for developers working on the platform.
+Welcome to the Lombok Island project documentation. This directory contains comprehensive guides and references for developers working on the platform.
 
 ## 📖 Documentation Index
 

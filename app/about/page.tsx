@@ -3,7 +3,7 @@ import { MapPin, Users, Award, Heart } from "lucide-react"
 import { Navigation } from "@/components/navigation"
 
 export const metadata: Metadata = {
-  title: "About Us - Island Paradise Tourism",
+  title: "About Us - Lombok Island Tourism",
   description:
     "Learn about our mission to showcase the world's most beautiful islands and create unforgettable travel experiences.",
 }
@@ -16,7 +16,7 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="relative py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">About Island Paradise</h1>
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">About Lombok Island</h1>
           <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
             We're passionate about connecting travelers with the world's most breathtaking islands, creating
             unforgettable experiences through immersive virtual tours, comprehensive travel guides, and curated local
@@ -32,7 +32,7 @@ export default function AboutPage() {
             <div>
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Mission</h2>
               <p className="text-gray-600 leading-relaxed mb-6">
-                Island Paradise Tourism was founded with a simple yet ambitious goal: to make the world's most stunning
+                Lombok Island Tourism was founded with a simple yet ambitious goal: to make the world's most stunning
                 islands accessible to everyone. Through cutting-edge 3D virtual tours, interactive maps, and
                 comprehensive travel resources, we bridge the gap between wanderlust and reality.
               </p>
@@ -96,7 +96,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Story</h2>
           <p className="text-lg text-gray-600 leading-relaxed mb-8">
-            Founded by a team of passionate travelers and technology enthusiasts, Island Paradise Tourism combines years
+            Founded by a team of passionate travelers and technology enthusiasts, Lombok Island Tourism combines years
             of exploration experience with cutting-edge web technology. Our founders have personally visited over 50
             islands worldwide, bringing firsthand knowledge to every destination we feature.
           </p>

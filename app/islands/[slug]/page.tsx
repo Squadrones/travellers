@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: IslandPageProps) {
   }
 
   return {
-    title: `${island.name} - Island Paradise`,
+    title: `${island.name} - Lombok Island`,
     description: island.short_description,
   }
 }

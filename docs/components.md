@@ -1,6 +1,6 @@
 # 🧩 Component Library
 
-This document provides comprehensive documentation for all UI components used in the Island Paradise project.
+This document provides comprehensive documentation for all UI components used in the Lombok Island project.
 
 ## 📚 Overview
 

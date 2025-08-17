@@ -1,6 +1,6 @@
 # 🚀 Installation Guide
 
-This guide will walk you through setting up the Island Paradise project on your local machine.
+This guide will walk you through setting up the Lombok Island project on your local machine.
 
 ## 📋 Prerequisites
 
@@ -67,7 +67,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 # Application Configuration
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-NEXT_PUBLIC_APP_NAME="Island Paradise"
+NEXT_PUBLIC_APP_NAME="Lombok Island"
 
 # Optional: Development Settings
 NODE_ENV=development
@@ -130,7 +130,7 @@ Your application should now be running at `http://localhost:3000`
 
 ### **Check Application**
 1. Open `http://localhost:3000` in your browser
-2. You should see the Island Paradise homepage
+2. You should see the Lombok Island homepage
 3. Navigate through different sections to ensure they load
 
 ### **Check Database Connection**

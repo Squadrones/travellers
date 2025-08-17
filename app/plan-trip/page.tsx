@@ -15,7 +15,7 @@ export default function PlanTripPage() {
 }
 
 export const metadata = {
-  title: "Plan Your Trip | Island Paradise",
+  title: "Plan Your Trip | Lombok Island",
   description:
     "Craft your perfect island getaway with our comprehensive trip planning tools. Select islands, book activities, and create personalized itineraries.",
 }

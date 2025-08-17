@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Menu, X, Waves } from "lucide-react"
+import Image from 'next/image'
 
 export function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -14,8 +15,7 @@ export function Navigation() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 font-bold text-xl text-cyan-600">
-            <Waves className="h-6 w-6" />
-            Island Paradise
+            <Image src="/lomboksland.svg" priority alt="Lombok Island" width={200} height={200} />
           </Link>
 
           {/* Desktop Navigation */}

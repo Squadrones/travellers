@@ -15,7 +15,7 @@ export default function IslandCard({ island }: IslandCardProps) {
           <img
             src={
               island.main_image_url ||
-              `/placeholder.svg?height=400&width=600&query=${island.name} tropical island paradise`
+              `/placeholder.svg?height=400&width=600&query=${island.name} tropical Lombok Island`
             }
             alt={island.name}
             className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"

@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Navigation } from "@/components/navigation"
 
 export const metadata: Metadata = {
-  title: "Contact Us - Island Paradise Tourism",
+  title: "Contact Us - Lombok Island Tourism",
   description: "Get in touch with our team for travel inquiries, partnerships, or support.",
 }
 

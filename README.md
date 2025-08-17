@@ -1,4 +1,4 @@
-# Island Paradise - Tropical Travel Platform
+# Lombok Island - Tropical Travel Platform
 
 ## 📑 Table of Contents
 
@@ -19,7 +19,7 @@
 
 ## 🌴 Overview
 
-Island Paradise is a modern, interactive travel platform that allows users to explore tropical destinations through virtual tours, plan customized itineraries, and discover unique island experiences. Built with Next.js 15, TypeScript, and Tailwind CSS, it provides an immersive way to explore the world's most beautiful islands before planning your next adventure.
+Lombok Island is a modern, interactive travel platform that allows users to explore tropical destinations through virtual tours, plan customized itineraries, and discover unique island experiences. Built with Next.js 15, TypeScript, and Tailwind CSS, it provides an immersive way to explore the world's most beautiful islands before planning your next adventure.
 
 ## ✨ Features
 

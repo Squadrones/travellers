@@ -1,6 +1,6 @@
 # 🗄️ Database Schema
 
-This document describes the database structure for the Island Paradise platform, including tables, relationships, and data flow.
+This document describes the database structure for the Lombok Island platform, including tables, relationships, and data flow.
 
 ## 📊 Database Overview
 
